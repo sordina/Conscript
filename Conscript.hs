@@ -18,7 +18,7 @@ run args = do
   c <- newChan
   startProcess args >>= writeChan c
   mapM_ (restart args c) . (filter (== '\n')) =<< getContents
-  block
+  readChan c >>= terminateProcess
 
 startProcess :: [String] -> IO ProcessHandle
 startProcess (h:t) = (\(_,_,_,ph) -> ph) `fmap` createProcess (proc h t)
@@ -33,6 +33,3 @@ restart args pio _unused = do
 
 help :: IO ()
 help = putStrLn "Usage: conscript command [args*]"
-
-block :: IO ()
-block = void $ newEmptyMVar >>= readMVar
