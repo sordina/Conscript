@@ -16,14 +16,15 @@ options args         = run args
 
 run :: [String] -> IO ()
 run args = do
-  hSetBuffering stdin NoBuffering
+  hSetBuffering stdin  LineBuffering
+  hSetBuffering stdout LineBuffering
   blocker <- newEmptyMVar
   running <- newEmptyMVar
   void $ forkIO $ forever $ starter args blocker running
-  mapM_ (killer blocker running) . (filter (== '\n')) =<< getContents
+  mapM_ (killer blocker running) . lines =<< getContents
 
-killer :: MVar () -> MVar ProcessHandle -> Char -> IO ()
-killer blocker running _char = void $ takeMVar running >>= terminateProcess >> takeMVar blocker
+killer :: MVar () -> MVar ProcessHandle -> String -> IO ()
+killer blocker running _input = void $ takeMVar running >>= terminateProcess >> takeMVar blocker
 
 starter :: [String] -> MVar () -> MVar ProcessHandle -> IO ()
 starter args blocker running = do
