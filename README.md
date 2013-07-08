@@ -18,3 +18,7 @@ Use like 'watch':
 Useful in conjunction with [Commando](https://github.com/sordina/Commando):
 
     commando -c echo | grep --line-buffered Add  | conscript ls
+
+## Binaries
+
+OS X 10.7.5 - [http://sordina.binaries.s3.amazonaws.com/conscript](http://sordina.binaries.s3.amazonaws.com/conscript)
