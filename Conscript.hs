@@ -1,9 +1,8 @@
+module Conscript (main) where
+
 import System.Environment
-import System.Process
-import System.Exit
 import System.IO
-import Control.Monad
-import Control.Concurrent
+import System.Conscript
 
 main :: IO ()
 main = getArgs >>= options
@@ -18,27 +17,8 @@ run :: [String] -> IO ()
 run args = do
   hSetBuffering stdin  LineBuffering
   hSetBuffering stdout LineBuffering
-  blocker <- newEmptyMVar
-  running <- newEmptyMVar
-  void $ forkIO $ forever $ starter args blocker running
-  mapM_ (killer blocker running) . lines =<< getContents
-
-killer :: MVar () -> MVar ProcessHandle -> String -> IO ()
-killer blocker running _input = void $ takeMVar running >>= terminateProcess >> takeMVar blocker
-
-starter :: [String] -> MVar () -> MVar ProcessHandle -> IO ()
-starter args blocker running = do
-  putMVar blocker ()
-  p <- startProcess args
-  putMVar running p
-  code <- waitForProcess p
-  case code of ExitFailure 15 -> return () -- Killed!
-               ExitFailure i  -> putStrLn $ "Process [" ++ unwords args ++ "] failed with exit-status [" ++ show i ++ "]"
-               ExitSuccess    -> return ()
-
-startProcess :: [String] -> IO ProcessHandle
-startProcess (h:t) = (\(_,_,_,ph) -> ph) `fmap` createProcess (proc h t)
-startProcess []    = help >> exitFailure
+  prog <- conscript args
+  getContents >>= prog . lines
 
 help :: IO ()
 help = putStrLn "Usage: conscript command [args*]"
