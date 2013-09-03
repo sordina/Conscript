@@ -21,4 +21,4 @@ Useful in conjunction with [Commando](https://github.com/sordina/Commando):
 
 ## Binaries
 
-OS X 10.7.5 - [http://sordina.binaries.s3.amazonaws.com/conscript](http://sordina.binaries.s3.amazonaws.com/conscript)
+* [conscript-1.0.0.0-MacOSX-10.7.5-11G63b.zip](http://sordina.binaries.s3.amazonaws.com/conscript-1.0.0.0-MacOSX-10.7.5-11G63b.zip)
