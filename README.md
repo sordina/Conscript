@@ -14,10 +14,20 @@ Use like 'watch':
 
     while true; do echo lol ; sleep 1; done | conscript ls
 
+Which is equivalent to the `xargs` command:
+
+    while true; do echo lol ; sleep 1; done | xargs -L 1 -I % ls
+
+Where `Conscript` differs from `xargs` is that if the script is a
+long-running process, then subsequent incoming lines will kill that
+process and restart it, rather than wait for it to finish.
+
 
 Useful in conjunction with [Commando](https://github.com/sordina/Commando):
 
     commando -c echo | grep --line-buffered Add  | conscript ls
+
+
 
 ## Binaries
 
