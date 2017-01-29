@@ -27,6 +27,9 @@ Useful in conjunction with [Commando](https://github.com/sordina/Commando):
 
     commando -c echo | grep --line-buffered Add  | conscript ls
 
+Another example - Watch updates to a file:
+
+    commando | conscript bash -c "clear && less file.txt"
 
 
 ## Binaries
